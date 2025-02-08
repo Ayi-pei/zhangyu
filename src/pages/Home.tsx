@@ -17,9 +17,8 @@ const gameModes: GameMode[] = [
 ];
 
 const carouselImages = [
-  "https://images.unsplash.com/photo-1545671913-b89ac1b4ac10?w=1200&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1530051315435-58046fbc2649?w=1200&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1545671913-b89ac1b4ac10?w=1200&auto=format&fit=crop&q=80",
+  "/images/carousel-1.jpg",
+  "/images/carousel-2.jpg",
 ];
 
 function Home() {
