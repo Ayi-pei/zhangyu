@@ -8,7 +8,7 @@ const generateVideos = (count: number) => {
     id: i + 1,
     title: `인기 최고 비디오 ${i + 1}`,
     thumbnail: `/images/thumbnail-${i + 1}.jpg`, // public/images/thumbnail-?.jpg
-    url: `/videos/video-${i + 1}.mp4` // public/videos/video-?.mp4
+    url: `/videos/video-${i + 1}.ts` // public/videos/video-?.ts
   }));
 };
 
