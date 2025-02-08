@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import { Play } from 'lucide-react';
 import BottomNav from '../components/BottomNav';
 
-// Generate more video data
+// 生成视频数据，视频和缩略图均为本地文件
 const generateVideos = (count: number) => {
-  return Array(count).fill(null).map((_, i) => ({
+  return Array.from({ length: count }, (_, i) => ({
     id: i + 1,
     title: `인기 최고 비디오 ${i + 1}`,
-    thumbnail:  `/images/thumbnail-${i + 1}.jpg`,
-    url: 'https://www.youtube.com/watch?v=C55zjPlqdYw&list=PLrjMn42Z6dl0l-2uKKk0vOK5QfQdNYNdp' // Example URL
+    thumbnail: `/images/thumbnail-${i + 1}.jpg`, // public/images/thumbnail-?.jpg
+    url: `/videos/video-${i + 1}.mp4` // public/videos/video-?.mp4
   }));
 };
 
 const VIDEOS_PER_PAGE = 12;
-const ALL_VIDEOS = generateVideos(36); // Generate 36 videos
+const ALL_VIDEOS = generateVideos(36); // 生成36个视频数据
 
 function Videos() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,17 +31,14 @@ function Videos() {
         <h1 className="text-2xl font-bold">비디오 목록</h1>
       </div>
 
-      {selectedVideo ? (
+      {/* 当选中视频时，显示视频播放器 */}
+      {selectedVideo && (
         <div className="aspect-video bg-black" aria-label="视频播放器">
-          <iframe
-            src={selectedVideo}
-            className="w-full h-full"
-            allowFullScreen
-            title="视频播放器"
-          />
+          <video src={selectedVideo} className="w-full h-full" controls autoPlay />
         </div>
-      ) : null}
+      )}
 
+      {/* 视频列表 */}
       <div className="grid grid-cols-2 gap-4 p-4">
         {currentVideos.map((video) => (
           <div
@@ -69,7 +66,7 @@ function Videos() {
         ))}
       </div>
 
-      {/* Pagination */}
+      {/* 分页 */}
       <div className="flex justify-center gap-2 my-4">
         {Array.from({ length: totalPages }, (_, i) => (
           <button
