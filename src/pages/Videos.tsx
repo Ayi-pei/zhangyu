@@ -28,7 +28,7 @@ const generateVideos = () => {
     id: index + 1,  // 为每个视频分配一个 ID
     title: `인기 최고 비디오 ${index + 1}`,  // 视频标题
     thumbnail: `/images/thumbnail-${index + 1}.jpg`,  // 缩略图
-    url: `https://player.vimeo.com/video/1054848${id}&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479'`,  // 使用 Vimeo 视频 ID 生成 URL
+    url: `https://player.vimeo.com/video/${id}?badge=0&byline=0&portrait=0`,  // 使用 Vimeo 视频 ID 生成 URL，并加入隐藏账户信息的参数
   }));
 };
 
@@ -56,7 +56,7 @@ function Videos() {
         <div className="aspect-video bg-black" aria-label="视频播放器">
           <iframe //使用 iframe 元素嵌入 Vimeo 视频
             title="온라인으로 시청 중..."
-            src={selectedVideo}
+            src={selectedVideo}  // 使用带有隐藏参数的 Vimeo 视频链接
             className="w-full h-full"
             frameBorder="0"
             allow="autoplay; fullscreen"
