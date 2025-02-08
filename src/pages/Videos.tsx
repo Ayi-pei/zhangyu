@@ -4,23 +4,21 @@ import BottomNav from '../components/BottomNav';
 
 // Vimeo 视频 ID 数组
 const videoIds = [
-  '1054848172/864d119fd0',
-  '1054848188/08ebdc2868',
-  '1054848193/2e47ea989d',
-  '1054848209/e705167548',
-  '1054848219/22ec4246ed',
-  '1054848232/5194683afb',
-  '1054848248/ccae2c6ca5',
-  '1054848255/5ad28fb76c',
-  '1054848261/43da8c2ffb',
-  '1054848276/491f885121',
-  '1054848296/1a07be9e3c',
-  '1054848316/36ea7e9282',
-  '1054848333/8a745e4f17',
-  '1054848348/1cce4e0cc8',
-  '1054848366/75fb41ea57',
-  '1054848377/f3accf2201',
-  '1054848386/b4c8ddeb2f',
+  '193?h=2e47ea989d',
+  '209?h=e705167548',
+  '219?h=22ec4246ed',
+  '232?h=5194683afb',
+  '248?h=ccae2c6ca5',
+  '255?h=5ad28fb76c',
+  '261?h=43da8c2ffb',
+  '276?h=491f885121',
+  '296?h=1a07be9e3c',
+  '316?h=36ea7e9282',
+  '333?h=8a745e4f17',
+  '348?h=1cce4e0cc8',
+  '366?h=75fb41ea57',
+  '377?h=f3accf2201',
+  '386?h=b4c8ddeb2f',
    // 添加更多的视频 ID...
 ];
 
@@ -30,7 +28,7 @@ const generateVideos = () => {
     id: index + 1,  // 为每个视频分配一个 ID
     title: `인기 최고 비디오 ${index + 1}`,  // 视频标题
     thumbnail: `/images/thumbnail-${index + 1}.jpg`,  // 缩略图
-    url: `https://vimeo.com/${id}`,  // 使用 Vimeo 视频 ID 生成 URL
+    url: `https://player.vimeo.com/video/1054848${id}&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479'`,  // 使用 Vimeo 视频 ID 生成 URL
   }));
 };
 
