@@ -146,7 +146,7 @@ function Profile() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-80">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">跳跃历史记录</h3>
+              <h3 className="text-lg font-semibold">역사 선택 기록</h3>
               <button
                 onClick={() => setJumpHistoryDialog(false)}
                 className="text-gray-500 hover:text-gray-700"
@@ -158,10 +158,10 @@ function Profile() {
             <div className="space-y-2">
               {jumpHistory.map((jump: Jump, index: number) => (
                 <div key={index} className="flex justify-between items-center bg-gray-100 p-2 rounded">
-                  <span>{jump.direction}跳</span>
+                  <span>{jump.direction}선택</span>
                   <div className="flex gap-4">
-                    <span>步数：{jump.steps}</span>
-                    <span>结果：{jump.result}</span>
+                    <span>수량：{jump.steps}</span>
+                    <span>결과：{jump.result}</span>
                     <span className="text-sm text-gray-500">{formatTimestamp(jump.timestamp)}</span>
                   </div>
                 </div>

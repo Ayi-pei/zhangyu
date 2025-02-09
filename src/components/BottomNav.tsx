@@ -16,14 +16,14 @@ function BottomNav() {
           className={`flex flex-col items-center ${isActive('/') ? 'text-blue-600' : 'text-gray-600'}`}
         >
           <Home className="w-6 h-6" />
-          <span className="text-xs mt-1">主页</span>
+          <span className="text-xs mt-1">홈</span>
         </button>
         <button
           onClick={() => navigate('/videos')}
           className={`flex flex-col items-center ${isActive('/videos') ? 'text-blue-600' : 'text-gray-600'}`}
         >
           <Film className="w-6 h-6" />
-          <span className="text-xs mt-1">观影</span>
+          <span className="text-xs mt-1">동영상</span>
         </button>
         <button
           onClick={() => {
@@ -36,14 +36,14 @@ function BottomNav() {
           className={`flex flex-col items-center ${isActive('/game') ? 'text-blue-600' : 'text-gray-600'}`}
         >
           <Gamepad2 className="w-6 h-6" />
-          <span className="text-xs mt-1">游戏</span>
+          <span className="text-xs mt-1">게임</span>
         </button>
         <button
           onClick={() => navigate('/profile')}
           className={`flex flex-col items-center ${isActive('/profile') ? 'text-blue-600' : 'text-gray-600'}`}
         >
           <User className="w-6 h-6" />
-          <span className="text-xs mt-1">个人中心</span>
+          <span className="text-xs mt-1">내 페이지</span>
         </button>
       </div>
     </div>

@@ -32,7 +32,7 @@ function JumpDialog({ isOpen, onClose, onConfirm, direction }: JumpDialogProps) 
     e.preventDefault();
     const stepsNum = parseInt(steps);
     if (isNaN(stepsNum) || stepsNum < 1) {
-      setError('步数必须为大于零的正整数');
+      setError('숫자는 0보다 큰 양의 정수여야 합니다');
       return;
     }
     onConfirm(stepsNum);
@@ -45,7 +45,7 @@ function JumpDialog({ isOpen, onClose, onConfirm, direction }: JumpDialogProps) 
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white rounded-lg p-6 w-80">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">输入{direction}步数</h3>
+          <h3 className="text-lg font-semibold">전송{direction}포인트</h3>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700" aria-label="关闭">
             <X className="w-5 h-5" />
           </button>
@@ -65,7 +65,7 @@ function JumpDialog({ isOpen, onClose, onConfirm, direction }: JumpDialogProps) 
             type="submit"
             className="w-full bg-blue-600 text-white rounded-lg py-2 hover:bg-blue-700 transition-colors"
           >
-            确定
+            오케이
           </button>
         </form>
       </div>
@@ -120,7 +120,7 @@ function GamePlay() {
     const newJump: Jump = {
       direction: currentDirection,
       steps,
-      result: `${result}步`,
+      result: `${result}포인트`,
       timestamp: Date.now(),
     };
 
@@ -134,10 +134,10 @@ function GamePlay() {
 
   const getDirectionLabel = (direction: string) => {
     switch (direction) {
-      case '前': return '前跳';
-      case '后': return '后跳';
-      case '左': return '左跳';
-      case '右': return '右跳';
+      case '前': return '귀엽';
+      case '后': return '순수하';
+      case '左': return '직설적이';
+      case '右': return '섹시하';
       default: return '';
     }
   };
@@ -152,7 +152,7 @@ function GamePlay() {
             className="flex items-center gap-2 hover:bg-blue-700 p-2 rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
-            返回
+            반환
           </button>
           <h1 className="text-xl font-bold">{location.state?.mode || `${mode}模式`}</h1>
           <div className="bg-blue-700 px-4 py-2 rounded-lg">
@@ -169,35 +169,35 @@ function GamePlay() {
             className="bg-white bg-opacity-90 p-6 rounded-lg flex flex-col items-center gap-2 hover:bg-opacity-100 transition-all transform hover:scale-105"
           >
             <ArrowUp className="w-8 h-8" />
-            <span>前跳</span>
+            <span>귀엽</span>
           </button>
           <button
             onClick={() => handleJumpClick('后')}
             className="bg-white bg-opacity-90 p-6 rounded-lg flex flex-col items-center gap-2 hover:bg-opacity-100 transition-all transform hover:scale-105"
           >
             <ArrowDown className="w-8 h-8" />
-            <span>后跳</span>
+            <span>순수하</span>
           </button>
           <button
             onClick={() => handleJumpClick('左')}
             className="bg-white bg-opacity-90 p-6 rounded-lg flex flex-col items-center gap-2 hover:bg-opacity-100 transition-all transform hover:scale-105"
           >
             <ArrowLeftJump className="w-8 h-8" />
-            <span>左跳</span>
+            <span>직설적이</span>
           </button>
           <button
             onClick={() => handleJumpClick('右')}
             className="bg-white bg-opacity-90 p-6 rounded-lg flex flex-col items-center gap-2 hover:bg-opacity-100 transition-all transform hover:scale-105"
           >
             <ArrowRight className="w-8 h-8" />
-            <span>右跳</span>
+            <span>섹시하</span>
           </button>
         </div>
 
         {/* Jump History */}
         {jumps.length > 0 && (
           <div className="mt-8 bg-white bg-opacity-90 rounded-lg p-4 max-w-md mx-auto">
-            <h2 className="text-lg font-semibold mb-4">跳跃记录</h2>
+            <h2 className="text-lg font-semibold mb-4">선택 기록</h2>
             <div className="space-y-2">
               {jumps.map((jump, index) => (
                 <div
@@ -206,8 +206,8 @@ function GamePlay() {
                 >
                   <span>{getDirectionLabel(jump.direction)}</span>
                   <div className="flex gap-4">
-                    <span>输入：{jump.steps}步</span>
-                    <span className="font-semibold">结果：{jump.result}</span>
+                    <span>전송：{jump.steps}포인트</span>
+                    <span className="font-semibold">결론：{jump.result}</span>
                     <span className="text-sm text-gray-500">{formatTimestamp(jump.timestamp)}</span>
                   </div>
                 </div>

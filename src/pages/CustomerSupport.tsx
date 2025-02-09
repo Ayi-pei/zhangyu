@@ -29,7 +29,7 @@ const CustomerSupport = () => {
   const handleReceiveMessage = () => {
     setMessages((prevMessages) => [
       ...prevMessages,
-      { sender: 'support', text: '客服：您好，有什么问题吗？' },
+      { sender: 'support', text: '고객 센터：안녕하세요, 어떤 문제 있으신가요?' },
     ]);
   };
 
@@ -51,12 +51,12 @@ const CustomerSupport = () => {
           type="text"
           value={messageText}
           onChange={(e) => setMessageText(e.target.value)}
-          placeholder="请输入您的消息..."
+          placeholder="메시지를 입력해 주세요..."
         />
-        <button onClick={handleSendMessage}>发送</button>
+        <button onClick={handleSendMessage}>전송</button>
       </div>
 
-      <button onClick={handleReceiveMessage}>模拟客服回复</button>
+      <button onClick={handleReceiveMessage}>시뮬레이션된 고객 서비스 답변</button>
     </div>
   );
 };
