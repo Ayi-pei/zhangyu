@@ -143,7 +143,7 @@ function GamePlay() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-900 to-blue-600 pb-16">
+    <div className="min-h-screen bg-gradient-to-b from-[#8c52ff] to-[#ff914d] pb-16">
       {/* Header */}
       <div className="bg-blue-800 text-white p-4">
         <div className="container mx-auto flex justify-between items-center">

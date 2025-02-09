@@ -46,29 +46,38 @@ function Videos() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-100 pb-20">
-      <div className="bg-blue-600 text-white p-4">
+    <div className="min-h-screen bg-gradient-to-b from-[#8c52ff] to-[#ff914d] pb-20">
+      <div className="bg-blue-600 text-white p-4 rounded-b-lg">
         <h1 className="text-2xl font-bold">비디오 목록</h1>
       </div>
 
       {/* 当选中视频时，显示视频播放器 */}
       {selectedVideo && (
-        <div className="aspect-video bg-black" aria-label="视频播放器">
-          <iframe //使用 iframe 元素嵌入 Vimeo 视频
-            title="온라인으로 시청 중..."
-            src={selectedVideo}  // 使用带有隐藏参数的 Vimeo 视频链接
-            className="w-full h-full"
-            frameBorder="0"
-            allow="autoplay; fullscreen"
-            allowFullScreen
-          />
+        <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center">
+          <div className="relative w-full max-w-4xl aspect-video">
+            <button
+              onClick={() => setSelectedVideo(null)}
+              className="absolute top-2 right-2 text-white bg-gray-800 p-2 rounded-full hover:bg-gray-700 transition-all"
+              aria-label="关闭视频"
+            >
+              ×
+            </button>
+            <iframe
+              title="온라인으로 시청 중..."
+              src={selectedVideo}
+              className="w-full h-full"
+              frameBorder="0"
+              allow="autoplay; fullscreen"
+              allowFullScreen
+            />
+          </div>
         </div>
       )}
 
       {/* 视频列表 */}
       <div className="grid grid-cols-2 gap-4 p-4">
         {currentVideos.map((video) => (
-          <div key={video.id} className="bg-white rounded-lg overflow-hidden shadow-sm">
+          <div key={video.id} className="bg-white rounded-lg overflow-hidden shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl">
             <div className="relative">
               <img src={video.thumbnail} alt={video.title} className="w-full aspect-video object-cover" />
               <button
@@ -92,7 +101,7 @@ function Videos() {
           <button
             key={i}
             onClick={() => setCurrentPage(i + 1)}
-            className={`w-8 h-8 rounded-full ${currentPage === i + 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'}`}
+            className={`w-8 h-8 rounded-full ${currentPage === i + 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'} hover:bg-blue-500 hover:text-white transition-all`}
           >
             {i + 1}
           </button>

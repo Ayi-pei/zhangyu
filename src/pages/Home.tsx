@@ -42,7 +42,7 @@ function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-900 to-blue-600 pb-16">
+    <div className="min-h-screen bg-gradient-to-r from-[#8c52ff] to-[#ff914d] pb-16">
       {/* Carousel */}
       <div className="relative h-64 overflow-hidden">
         {carouselImages.map((img, index) => (
@@ -55,7 +55,7 @@ function Home() {
             <img
               src={img}
               alt={`Slide ${index + 1}`}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover rounded-xl"
             />
           </div>
         ))}
@@ -72,12 +72,12 @@ function Home() {
         </div>
 
         {/* Game Modes */}
-        <div className="grid grid-cols-3 gap-4 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
           {gameModes.map((mode) => (
             <button
               key={mode.name}
               onClick={() => handleModeSelect(mode)}
-              className="p-6 rounded-lg text-white text-center transition-all bg-blue-700 hover:bg-blue-600 hover:scale-105"
+              className="p-6 rounded-lg bg-blue-500 text-white text-center transition-all hover:bg-blue-400 hover:scale-105 hover:shadow-lg"
             >
               <div className="flex flex-col items-center gap-2">
                 {mode.icon}

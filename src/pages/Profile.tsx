@@ -26,6 +26,7 @@ function Profile() {
     if (action) {
       try {
         // 调用 action
+        action();
       } catch {
         setError('작업을 처리하는 동안 오류가 발생했습니다.');
       }
@@ -33,11 +34,11 @@ function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 pb-16">
-      <div className="bg-blue-600 text-white p-4">
+    <div className="min-h-screen bg-gradient-to-b from-[#8c52ff] to-[#ff914d] pb-16">
+      <div className="bg-blue-600 text-white p-4 rounded-b-lg">
         <button
           onClick={() => navigate('/')}
-          className="flex items-center gap-2 mb-4"
+          className="flex items-center gap-2 mb-4 hover:text-blue-200 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           뒤로 가기
@@ -78,7 +79,7 @@ function Profile() {
       </div>
 
       {error && (
-        <div className="absolute top-4 right-4 bg-red-500 text-white p-3 rounded-lg shadow-md">
+        <div className="absolute top-4 right-4 bg-red-500 text-white p-3 rounded-lg shadow-md animate-fade-in">
           <span>{error}</span>
         </div>
       )}
