@@ -1,14 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, MessageCircle, RefreshCw, History, LogOut, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '../components/BottomNav';
 
+interface Jump {
+  direction: string;
+  steps: number;
+  result: string;
+  timestamp: number;
+}
+
+const formatTimestamp = (timestamp: number) => {
+  const date = new Date(timestamp);
+  return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+};
+
 function Profile() {
   const navigate = useNavigate();
 
-  // 读取 localStorage 中的 jumpHistory（假设存储为 JSON 数组），获取记录数量（最多保留 15 条记录）
+  // 从 localStorage 获取跳跃历史记录（最多保留 15 条记录）
   const jumpHistory = JSON.parse(localStorage.getItem('jumpHistory') || '[]');
-  const gamesPlayed = jumpHistory.length; // 用记录数量表示参与次数
+  const gamesPlayed = jumpHistory.length;
 
   // 模拟的玩家信息
   const playerStats = {
@@ -18,13 +30,9 @@ function Profile() {
     nickname: '플레이어:001',
   };
 
-  // 定义菜单项，其中：
-  // - “이력 참여 횟수”显示参与记录的数量
-  // - “충전 보충”点击后弹出提示框
-  // - “고객 지원”点击后跳转到客服聊天页面（路径 '/customer-support'，需自行配置该路由并实现返回功能）
-  // - “종료 후퇴”点击后返回首页
+  // 菜单项
   const menuItems = [
-    { icon: <History className="w-6 h-6" />, label: '이력 참여 횟수', value: gamesPlayed },
+    { icon: <History className="w-6 h-6" />, label: '이력 참여 횟수', value: gamesPlayed, action: () => navigate('/game-history') },
     { icon: <RefreshCw className="w-6 h-6" />, label: '충전 보충', action: () => setShowRechargeDialog(true) },
     { icon: <MessageCircle className="w-6 h-6" />, label: '고객 지원', action: () => navigate('/customer-support') },
     { icon: <LogOut className="w-6 h-6" />, label: '종료 후퇴', action: () => navigate('/') },
@@ -32,15 +40,18 @@ function Profile() {
 
   const [error, setError] = useState('');
   const [showRechargeDialog, setShowRechargeDialog] = useState(false);
+  const [jumpHistoryDialog, setJumpHistoryDialog] = useState(false);
 
-  const handleAction = (action?: () => void) => {
-    if (action) {
-      try {
-        action();
-      } catch {
-        setError('작업을 처리하는 동안 오류가 발생했습니다.');
-      }
-    }
+  // 充值提示框
+  const handleRechargeConfirm = () => {
+    setShowRechargeDialog(false);
+    // 跳转到充值页面（假设链接）
+    window.open('https://example.com/recharge', '_blank');
+  };
+
+  // 打开跳跃历史记录
+  const handleHistoryClick = () => {
+    setJumpHistoryDialog(true);
   };
 
   return (
@@ -76,7 +87,7 @@ function Profile() {
         {menuItems.map((item, index) => (
           <button
             key={index}
-            onClick={() => handleAction(item.action)}
+            onClick={() => item.action && item.action()}
             className="w-full bg-white rounded-lg p-4 flex items-center justify-between shadow-sm transition-all hover:bg-gray-200 transform hover:scale-105"
           >
             <div className="flex items-center gap-3">
@@ -111,6 +122,14 @@ function Profile() {
             >
               충전 페이지 바로가기
             </a>
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={handleRechargeConfirm}
+                className="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700 transition-colors"
+              >
+                확인
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -119,6 +138,36 @@ function Profile() {
       {error && (
         <div className="absolute top-4 right-4 bg-red-500 text-white p-3 rounded-lg shadow-md">
           <span>{error}</span>
+        </div>
+      )}
+
+      {/* 跳跃历史记录弹窗 */}
+      {jumpHistoryDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-80">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">跳跃历史记录</h3>
+              <button
+                onClick={() => setJumpHistoryDialog(false)}
+                className="text-gray-500 hover:text-gray-700"
+                aria-label="关闭"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="space-y-2">
+              {jumpHistory.map((jump: Jump, index: number) => (
+                <div key={index} className="flex justify-between items-center bg-gray-100 p-2 rounded">
+                  <span>{jump.direction}跳</span>
+                  <div className="flex gap-4">
+                    <span>步数：{jump.steps}</span>
+                    <span>结果：{jump.result}</span>
+                    <span className="text-sm text-gray-500">{formatTimestamp(jump.timestamp)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
 
