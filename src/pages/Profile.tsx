@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ArrowLeft, MessageCircle, RefreshCw, History, LogOut, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '../components/BottomNav';
@@ -8,6 +8,7 @@ interface Jump {
   steps: number;
   result: string;
   timestamp: number;
+  pointsEarned: number;
 }
 
 const formatTimestamp = (timestamp: number) => {
@@ -18,19 +19,19 @@ const formatTimestamp = (timestamp: number) => {
 function Profile() {
   const navigate = useNavigate();
 
-  // 从 localStorage 获取跳跃历史记录（最多保留 15 条记录）
+  // Get jump history and current balance from localStorage
   const jumpHistory = JSON.parse(localStorage.getItem('jumpHistory') || '[]');
+  const currentBalance = parseInt(localStorage.getItem('playerBalance') || '1000');
   const gamesPlayed = jumpHistory.length;
 
-  // 模拟的玩家信息
+  // Player info
   const playerStats = {
-    steps: 1000,
+    balance: currentBalance,
     health: 100,
     avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80',
     nickname: '플레이어:001',
   };
 
-  // 菜单项
   const menuItems = [
     { icon: <History className="w-6 h-6" />, label: '이력 참여 횟수', value: gamesPlayed, action: () => navigate('/game-history') },
     { icon: <RefreshCw className="w-6 h-6" />, label: '충전 보충', action: () => setShowRechargeDialog(true) },
@@ -42,14 +43,11 @@ function Profile() {
   const [showRechargeDialog, setShowRechargeDialog] = useState(false);
   const [jumpHistoryDialog, setJumpHistoryDialog] = useState(false);
 
-  // 充值提示框
   const handleRechargeConfirm = () => {
     setShowRechargeDialog(false);
-    // 跳转到充值页面（假设链接）
     window.open('https://example.com/recharge', '_blank');
   };
 
-  // 打开跳跃历史记录
   const handleHistoryClick = () => {
     setJumpHistoryDialog(true);
   };
@@ -75,14 +73,14 @@ function Profile() {
           <div>
             <h2 className="text-xl font-bold">{playerStats.nickname}</h2>
             <div className="flex gap-4 mt-2 text-sm">
-              <span>현재 잔액：{playerStats.steps}</span>
+              <span>현재 잔액：{playerStats.balance}</span>
               <span>신용점수：{playerStats.health}</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 菜单列表 */}
+      {/* Menu List */}
       <div className="p-4 space-y-4">
         {menuItems.map((item, index) => (
           <button
@@ -99,7 +97,7 @@ function Profile() {
         ))}
       </div>
 
-      {/* 弹出充值提示框 */}
+      {/* Recharge Dialog */}
       {showRechargeDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-80">
@@ -134,14 +132,14 @@ function Profile() {
         </div>
       )}
 
-      {/* 错误提示 */}
+      {/* Error Message */}
       {error && (
         <div className="absolute top-4 right-4 bg-red-500 text-white p-3 rounded-lg shadow-md">
           <span>{error}</span>
         </div>
       )}
 
-      {/* 跳跃历史记录弹窗 */}
+      {/* Jump History Dialog */}
       {jumpHistoryDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-80">
@@ -162,6 +160,9 @@ function Profile() {
                   <div className="flex gap-4">
                     <span>수량：{jump.steps}</span>
                     <span>결과：{jump.result}</span>
+                    <span className={`font-semibold ${jump.pointsEarned >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      {jump.pointsEarned >= 0 ? '+' : ''}{jump.pointsEarned}
+                    </span>
                     <span className="text-sm text-gray-500">{formatTimestamp(jump.timestamp)}</span>
                   </div>
                 </div>

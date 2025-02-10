@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { ArrowLeft, ArrowUp, ArrowDown, ArrowLeft as ArrowLeftJump, ArrowRight, X } from 'lucide-react';
+import { ArrowLeft, X } from 'lucide-react';
 import BottomNav from '../components/BottomNav';
 
 interface JumpDialogProps {
@@ -15,6 +15,7 @@ interface Jump {
   steps: number;
   result: string;
   timestamp: number;
+  pointsEarned: number;
 }
 
 const formatTimestamp = (timestamp: number) => {
@@ -25,6 +26,7 @@ const formatTimestamp = (timestamp: number) => {
 function JumpDialog({ isOpen, onClose, onConfirm, direction }: JumpDialogProps) {
   const [steps, setSteps] = useState('');
   const [error, setError] = useState('');
+  const currentBalance = parseInt(localStorage.getItem('playerBalance') || '1000');
 
   if (!isOpen) return null;
 
@@ -35,6 +37,10 @@ function JumpDialog({ isOpen, onClose, onConfirm, direction }: JumpDialogProps) 
       setError('숫자는 0보다 큰 양의 정수여야 합니다');
       return;
     }
+    if (stepsNum > currentBalance) {
+      setError('잔액이 부족합니다');
+      return;
+    }
     onConfirm(stepsNum);
     setSteps('');
     setError('');
@@ -42,7 +48,7 @@ function JumpDialog({ isOpen, onClose, onConfirm, direction }: JumpDialogProps) 
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-80">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold">전송{direction}포인트</h3>
@@ -50,15 +56,19 @@ function JumpDialog({ isOpen, onClose, onConfirm, direction }: JumpDialogProps) 
             <X className="w-5 h-5" />
           </button>
         </div>
+        <div className="mb-4 text-sm text-gray-600">
+          현재 잔액: {currentBalance} 포인트
+        </div>
         <form onSubmit={handleSubmit}>
           <input
             type="number"
             value={steps}
             onChange={(e) => setSteps(e.target.value)}
             className="w-full px-3 py-2 border rounded-lg mb-4"
-            placeholder="输入步数"
+            placeholder="포인트 입력"
             autoFocus
             min="1"
+            max={currentBalance}
           />
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
           <button
@@ -115,20 +125,35 @@ function GamePlay() {
   };
 
   const handleJumpConfirm = (steps: number) => {
-    // 生成 0 到 steps 之间的随机数
-    const result = Math.floor(Math.random() * (steps + 1));
+    const possibleResults = ['귀엽', '순수하', '직설적이', '섹시하'];
+    const resultIndex = Math.floor(Math.random() * possibleResults.length);
+    const resultText = possibleResults[resultIndex];
+    const currentBalance = parseInt(localStorage.getItem('playerBalance') || '1000');
+    
+    let pointsEarned = 0;
+    if (resultText === getDirectionLabel(currentDirection)) {
+      // If the result matches the selected direction, earn 200% of the bet
+      pointsEarned = steps * 2;
+    } else {
+      // If no match, lose the bet amount
+      pointsEarned = -steps;
+    }
+
+    // Update player balance
+    const newBalance = currentBalance + pointsEarned;
+    localStorage.setItem('playerBalance', newBalance.toString());
+
     const newJump: Jump = {
       direction: currentDirection,
       steps,
-      result: `${result}포인트`,
+      result: resultText,
       timestamp: Date.now(),
+      pointsEarned
     };
 
-    console.log('New jump:', newJump);
     setJumps((prevJumps) => {
       const newJumps = [...prevJumps, newJump];
-      console.log('Updated jumps:', newJumps);
-      return newJumps.slice(-15); // 保留最近 15 条记录
+      return newJumps.slice(-15);
     });
   };
 
@@ -154,7 +179,7 @@ function GamePlay() {
             <ArrowLeft className="w-5 h-5" />
             반환
           </button>
-          <h1 className="text-xl font-bold">{location.state?.mode || `${mode}模式`}</h1>
+          <h1 className="text-xl font-bold">{location.state?.mode || `${mode}모드`}</h1>
           <div className="bg-blue-700 px-4 py-2 rounded-lg">
             {formatTime(timeLeft)}
           </div>
@@ -163,34 +188,38 @@ function GamePlay() {
 
       {/* Game Controls */}
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
+        <div className="grid grid-cols-2 gap-6 max-w-md mx-auto">
           <button
             onClick={() => handleJumpClick('前')}
-            className="bg-white bg-opacity-90 p-6 rounded-lg flex flex-col items-center gap-2 hover:bg-opacity-100 transition-all transform hover:scale-105"
+            className="group relative bg-gradient-to-br from-pink-500 to-rose-500 p-8 rounded-2xl 
+                     flex items-center justify-center transition-all transform hover:scale-105 
+                     hover:shadow-lg active:scale-95 active:shadow-inner"
           >
-            <ArrowUp className="w-8 h-8" />
-            <span>귀엽</span>
+            <span className="font-bold text-2xl text-white">귀엽</span>
           </button>
           <button
             onClick={() => handleJumpClick('后')}
-            className="bg-white bg-opacity-90 p-6 rounded-lg flex flex-col items-center gap-2 hover:bg-opacity-100 transition-all transform hover:scale-105"
+            className="group relative bg-gradient-to-br from-purple-500 to-indigo-500 p-8 rounded-2xl 
+                     flex items-center justify-center transition-all transform hover:scale-105 
+                     hover:shadow-lg active:scale-95 active:shadow-inner"
           >
-            <ArrowDown className="w-8 h-8" />
-            <span>순수하</span>
+            <span className="font-bold text-2xl text-white">순수하</span>
           </button>
           <button
             onClick={() => handleJumpClick('左')}
-            className="bg-white bg-opacity-90 p-6 rounded-lg flex flex-col items-center gap-2 hover:bg-opacity-100 transition-all transform hover:scale-105"
+            className="group relative bg-gradient-to-br from-blue-500 to-cyan-500 p-8 rounded-2xl 
+                     flex items-center justify-center transition-all transform hover:scale-105 
+                     hover:shadow-lg active:scale-95 active:shadow-inner"
           >
-            <ArrowLeftJump className="w-8 h-8" />
-            <span>직설적이</span>
+            <span className="font-bold text-2xl text-white">직설적이</span>
           </button>
           <button
             onClick={() => handleJumpClick('右')}
-            className="bg-white bg-opacity-90 p-6 rounded-lg flex flex-col items-center gap-2 hover:bg-opacity-100 transition-all transform hover:scale-105"
+            className="group relative bg-gradient-to-br from-orange-500 to-amber-500 p-8 rounded-2xl 
+                     flex items-center justify-center transition-all transform hover:scale-105 
+                     hover:shadow-lg active:scale-95 active:shadow-inner"
           >
-            <ArrowRight className="w-8 h-8" />
-            <span>섹시하</span>
+            <span className="font-bold text-2xl text-white">섹시하</span>
           </button>
         </div>
 
@@ -208,6 +237,9 @@ function GamePlay() {
                   <div className="flex gap-4">
                     <span>전송：{jump.steps}포인트</span>
                     <span className="font-semibold">결론：{jump.result}</span>
+                    <span className={`font-semibold ${jump.pointsEarned >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      {jump.pointsEarned >= 0 ? '+' : ''}{jump.pointsEarned}
+                    </span>
                     <span className="text-sm text-gray-500">{formatTimestamp(jump.timestamp)}</span>
                   </div>
                 </div>
