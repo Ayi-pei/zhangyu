@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react'; // 确保这里导入了 useState
 import { Play } from 'lucide-react';
 import BottomNav from '../components/BottomNav';
 
@@ -58,7 +58,7 @@ function Videos() {
       {selectedVideo && (
         <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center">
           <div className="relative w-full max-w-4xl aspect-video">
-            <button
+            <button type="button"
               onClick={() => setSelectedVideo(null)}
               className="absolute top-2 right-2 text-white bg-gray-800 p-2 rounded-full hover:bg-gray-700 transition-all"
               aria-label="关闭视频"
@@ -117,4 +117,3 @@ function Videos() {
 }
 
 export default Videos;
-
